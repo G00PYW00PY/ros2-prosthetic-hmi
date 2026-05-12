@@ -8,7 +8,7 @@ This repository contains a ROS 2 Jazzy implementation of a tactile Human-Machine
 ### **The Physics: Analog-to-Digital Mapping**
 The core logic utilizes a **Linear Interpolation (LERP)** algorithm to map 10-bit raw ADC values to the biomechanical constraints defined in the URDF:
 
-$$\theta = \text{out\_min} + \frac{(\text{raw\_adc} - \text{in\_min}) \times (\text{out\_max} - \text{out\_min})}{\text{in\_max} - \text{in\_min}}$$
+$$\theta = OutMin + \frac{(RawAdc - InMin) \times (OutMax - OutMin)}{InMax - InMin}$$
 
 * **Input Range:** 0 - 1023 (Raw ADC units) via the MCP3008.
 * **Output Range:** Radians (Joint position limits).
@@ -37,12 +37,13 @@ To run the full hardware-in-the-loop (HIL) demo, the following environment is re
 
 #### **1. Simulation Mode (Mouse/Slider Control)**
 To test the URDF and visualization without hardware:
-```bash
-ros2 launch prosthetic_leg display.launch.py
+`ros2 launch prosthetic_leg display.launch.py`
 
-#### **1. HIL Mode:
-# Terminal 1: Launch Visualizer
-ros2 launch prosthetic_leg display.launch.py
+#### **2. HIL Mode (Joystick Control)**
+To bridge the physical gimbal to the digital twin:
 
-# Terminal 2: Execute Hardware Bridge
-python3 joystick_bridge.py
+*(Note: Close the GUI slider window after it opens to avoid topic contention.)*
+Terminal 1: Launch Visualizer
+`ros2 launch prosthetic_leg display.launch.py`
+Terminal 2: Execute hardware bridge:
+`python3 joystick_bridge.py`
