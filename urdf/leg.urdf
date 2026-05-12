@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<robot name="multiaxis_prosthetic_leg">
+
+  <material name="red"><color rgba="1 0 0 1"/></material>
+  <material name="orange"><color rgba="1 0.5 0 1"/></material>
+  <material name="yellow"><color rgba="1 1 0 1"/></material>
+  <material name="green"><color rgba="0 1 0 1"/></material>
+  <material name="blue"><color rgba="0 0 1 1"/></material>
+  <material name="violet"><color rgba="0.5 0 1 1"/></material>
+
+  <link name="base_link">
+    <visual>
+      <geometry><sphere radius="0.05"/></geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.05"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <link name="hip_intermediate_link">
+    <inertial>
+      <mass value="0.01"/> <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <link name="upper_leg">
+    <visual>
+      <geometry><cylinder length="0.4" radius="0.04"/></geometry>
+      <origin xyz="0 0 -0.2"/>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <geometry><cylinder length="0.4" radius="0.04"/></geometry>
+      <origin xyz="0 0 -0.2"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 -0.2"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.0274" ixy="0" ixz="0" iyy="0.0274" iyz="0" izz="0.0016"/>
+    </inertial>
+  </link>
+
+  <link name="knee_intermediate_link">
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <link name="lower_leg">
+    <visual>
+      <geometry><cylinder length="0.4" radius="0.03"/></geometry>
+      <origin xyz="0 0 -0.2"/>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <geometry><cylinder length="0.4" radius="0.03"/></geometry>
+      <origin xyz="0 0 -0.2"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 -0.2"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.0203" ixy="0" ixz="0" iyy="0.0203" iyz="0" izz="0.0006"/>
+    </inertial>
+  </link>
+
+  <link name="ankle_intermediate_link">
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <link name="foot">
+    <visual>
+      <geometry><box size="0.2 0.1 0.05"/></geometry>
+      <origin xyz="0.05 0 -0.025"/>
+      <material name="violet"/>
+    </visual>
+    <collision>
+      <geometry><box size="0.2 0.1 0.05"/></geometry>
+      <origin xyz="0.05 0 -0.025"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.05 0 -0.025"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0017" iyz="0" izz="0.0021"/>
+    </inertial>
+  </link>
+
+  <joint name="HIP_1_Flexion" type="revolute">
+    <parent link="base_link"/><child link="hip_intermediate_link"/>
+    <origin xyz="0 0 0"/><axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
+  </joint>
+
+  <joint name="HIP_2_Lateral" type="revolute">
+    <parent link="hip_intermediate_link"/><child link="upper_leg"/>
+    <origin xyz="0 0 0"/><axis xyz="1 0 0"/>
+    <limit lower="-0.5" upper="0.5" effort="100" velocity="1"/>
+  </joint>
+
+  <joint name="KNEE_1_Flexion" type="revolute">
+    <parent link="upper_leg"/><child link="knee_intermediate_link"/>
+    <origin xyz="0 0 -0.4"/><axis xyz="0 1 0"/>
+    <limit lower="0" upper="1.57" effort="100" velocity="1"/>
+  </joint>
+
+  <joint name="KNEE_2_Rotation" type="revolute">
+    <parent link="knee_intermediate_link"/><child link="lower_leg"/>
+    <origin xyz="0 0 0"/><axis xyz="0 0 1"/>
+    <limit lower="-0.2" upper="0.2" effort="100" velocity="1"/>
+  </joint>
+
+  <joint name="ANKLE_1_Pitch" type="revolute">
+    <parent link="lower_leg"/><child link="ankle_intermediate_link"/>
+    <origin xyz="0 0 -0.4"/><axis xyz="0 1 0"/>
+    <limit lower="-0.6" upper="0.6" effort="100" velocity="1"/>
+  </joint>
+
+  <joint name="ANKLE_2_Roll" type="revolute">
+    <parent link="ankle_intermediate_link"/><child link="foot"/>
+    <origin xyz="0 0 0"/><axis xyz="1 0 0"/>
+    <limit lower="-0.3" upper="0.3" effort="100" velocity="1"/>
+  </joint>
+
+</robot>
