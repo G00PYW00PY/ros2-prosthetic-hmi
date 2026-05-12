@@ -10,7 +10,7 @@ The core logic utilizes a **Linear Interpolation (LERP)** algorithm to map 10-bi
 
 $$\theta = \text{out\_min} + \frac{(\text{raw\_adc} - \text{in\_min}) \times (\text{out\_max} - \text{out\_min})}{\text{in\_max} - \text{in\_min}}$$
 
-* **Input Range:** $0 - 1023$ (Raw ADC units) via the MCP3008.
+* **Input Range:** 0 - 1023 (Raw ADC units) via the MCP3008.
 * **Output Range:** Radians (Joint position limits).
 * **Calibration:** A software-level offset was established to account for a **1.0V electrical center**, ensuring a neutral "standing" posture when the joystick is at rest.
 
@@ -19,8 +19,9 @@ $$\theta = \text{out\_min} + \frac{(\text{raw\_adc} - \text{in\_min}) \times (\t
 ### **System Architecture**
 ![Circuit Diagram](CircuitDiagramROS2LEG.png)
 
-* **Hardware:** Raspberry Pi 5, MCP3008 ADC, and a 4-Axis Analog Joystick (250kΩ Potentiometers).
-* **Simulation Environment:** RViz2 for 3D visualization
+* **Hardware:** Raspberry Pi 5, MCP3008 ADC, and a 4-Axis Analog Gimbal (250kΩ Potentiometers).
+* **Communication:** SPI Bus clocked at 1.35 MHz for high-frequency control loops.
+* **Simulation Environment:** RViz2 for 3D visualization and Gazebo Harmonic for physics-based simulation.
 
 ---
 
@@ -39,11 +40,9 @@ To test the URDF and visualization without hardware:
 ```bash
 ros2 launch prosthetic_leg display.launch.py
 
-#### 2. HIL Mode (Joystick Control)
-Launch the visualizer: ros2 launch prosthetic_leg display.launch.py.
+#### **1. HIL Mode:
+# Terminal 1: Launch Visualizer
+ros2 launch prosthetic_leg display.launch.py
 
-Toggle Input: Close the joint_state_publisher_gui slider window to prevent topic contention.
-
-Execute the Bridge:
-
+# Terminal 2: Execute Hardware Bridge
 python3 joystick_bridge.py
