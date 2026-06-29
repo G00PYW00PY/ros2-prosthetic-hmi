@@ -6,20 +6,18 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 
 def generate_launch_description():
-    # 1. Setup paths
+    #setup paths
     pkg_dir = get_package_share_directory('prosthetic_leg')
     urdf_file = os.path.join(pkg_dir, 'urdf', 'leg.urdf')
 
-    # 2. Start Gazebo (Harmonic)
-    # This launches the empty simulator world
+    #start gazebo
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
         launch_arguments={'gz_args': '-r empty.sdf'}.items(),
     )
 
-    # 3. Robot State Publisher
-    # Still needed so Gazebo knows the robot structure
+    #state publisher
     rsp = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -27,8 +25,7 @@ def generate_launch_description():
         parameters=[{'robot_description': open(urdf_file).read(), 'use_sim_time': True}]
     )
 
-    # 4. Spawn the robot in Gazebo
-    # This takes the URDF and places it at (0,0,1) meter height
+    #spawn robot
     spawn_robot = Node(
         package='ros_gz_sim',
         executable='create',
