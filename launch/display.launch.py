@@ -6,16 +6,13 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
-    # --- 1. FILE PATH SETUP ---
-    # This finds the actual folder where your package is installed on the system.
+    #find where folder is stored
     package_dir = get_package_share_directory('prosthetic_leg')
 
-    # This creates the full path to your leg.urdf file
+    #path to urdf
     urdf_file = os.path.join(package_dir, 'urdf', 'leg.urdf')
 
-    # --- 2. ROBOT STATE PUBLISHER ---
-    # This node is the "Heart" of the system.
-    # It reads the URDF file and calculates the 3D position of every link.
+    #read urdf and find positions
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -27,21 +24,17 @@ def generate_launch_description():
         }]
     )
 
-    # --- 3. JOINT STATE PUBLISHER GUI ---
-    # This is the "Remote Control."
-    # It pops up the window with sliders for the Hip, Knee, and Ankle.
+    #gui
     joint_state_gui_node = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui'
     )
 
-    # --- 4. RVIZ2 ---
-    # This is the "Eyes" (The 3D Viewer).
+    #rviz2
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        # Adding back the argument to load a default URDF config
-        # This prevents you from having to manually add the 'RobotModel' in RViz every time.
+        #default urdf config
         arguments=['-d', os.path.join(
             get_package_share_directory('urdf_tutorial'),
             'rviz',
@@ -49,8 +42,7 @@ def generate_launch_description():
         )]
     )
 
-    # --- 5. THE RETURN (The missing piece!) ---
-    # This list tells ROS 2 exactly which nodes to start up.
+    #tell ros2 what nodes
     return LaunchDescription([
         robot_state_publisher_node,
         joint_state_gui_node,
