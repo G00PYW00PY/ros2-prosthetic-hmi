@@ -13,13 +13,13 @@ setup(
          ['resource/prosthetic_leg']),
         ('share/' + package_name, ['package.xml']),
 
-        # This line now includes BOTH your RViz display and your Gazebo sim launch files
+        #have both rviz and gazebo
         ('share/' + package_name + '/launch', glob('launch/*.launch.py')),
 
-        # This ensures your URDF folder and everything inside it gets installed
+        #call urdf
         ('share/' + package_name + '/urdf', glob('urdf/*')),
 
-        # Added a placeholder for RViz config files (useful for the symposium!)
+        #rviz
         ('share/' + package_name + '/rviz', glob('rviz/*.rviz')),
     ],
     install_requires=['setuptools'],
